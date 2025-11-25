@@ -1,0 +1,47 @@
+Mallu AI Remastered — Google AI Agent
+
+A multi-skill personal AI assistant powered by Gemini 2.5 Flash.
+
+🔧 Features
+
+Chat interface
+
+Code assistant
+
+Study helper
+
+Multi-skill AI agent
+
+Fast and clean Flask backend
+
+Simple HTML/JS UI
+
+🚀 Run Locally
+1. Install requirements
+pip install -r requirements.txt
+2. Set your API key
+
+Linux/macOS:
+export GEMINI_API_KEY="your_key_here"
+
+Windows PowerShell:
+setx GEMINI_API_KEY "your_key_here"
+
+3. Start the server
+python main.py
+
+4. Open in browser
+
+Visit: 3. Start the server
+python main.py
+
+4. Open in browser
+
+Visit:3. Start the server
+python main.py
+
+4. Open in browser
+
+Visit: http://127.0.0.1:5000
+
+

@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mallu AI Agent</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Your existing CSS styles remain the same */
+        :root {
+            --primary-blue: #1a73e8;
+            --dark-bg: #121212;
+            --dark-surface: #1e1e1e;
+            --dark-surface-hover: #2a2a2a;
+            --dark-text: #ffffff;
+            --dark-text-secondary: #aaaaaa;
+            --border-color: #333333;
+            --accent-color: #4285f4;
+            --success-color: #34a853;
+            --warning-color: #fbbc05;
+            --danger-color: #ea4335;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 300px;
+            background-color: var(--dark-surface);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .logo-container {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-blue), #4285f4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-blue), white);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .history-section {
+            padding: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: var(--dark-text-secondary);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .history-list {
+            list-style: none;
+        }
+
+        .history-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-item:hover {
+            background-color: var(--dark-surface-hover);
+        }
+
+        .history-item.active {
+            background-color: rgba(26, 115, 232, 0.2);
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        .history-icon {
+            color: var(--primary-blue);
+            font-size: 14px;
+        }
+
+        .history-text {
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 14px;
+        }
+
+        .sidebar-footer {
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-details {
+            flex-grow: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .user-status {
+            font-size: 12px;
+            color: var(--dark-text-secondary);
+        }
+
+        /* Main Chat Area */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-header {
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--dark-surface);
+        }
+
+        .chat-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-title .logo {
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+        }
+
+        .chat-title-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--dark-text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: var(--dark-surface-hover);
+            color: var(--dark-text);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 15px;
+            max-width: 85%;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background-color: var(--primary-blue);
+        }
+
+        .message.ai .message-avatar {
+            background-color: var(--dark-surface-hover);
+            color: var(--primary-blue);
+        }
+
+        .message-content {
+            background-color: var(--dark-surface);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .message.user .message-content {
+            background-color: var(--primary-blue);
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.ai .message-content {
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-text {
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .message-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--dark-text-secondary);
+        }
+
+        .message.user .message-meta {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--dark-surface);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .text-input {
+            flex-grow: 1;
+            background-color: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            color: var(--dark-text);
+            font-size: 15px;
+            resize: none;
+            min-height: 60px;
+            max-height: 150px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .text-input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .file-upload-btn, .send-btn {
+            background: none;
+            border: none;
+            color: var(--dark-text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-upload-btn:hover {
+            color: var(--dark-text);
+            background-color: var(--dark-surface-hover);
+        }
+
+        .send-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .send-btn:hover {
+            background-color: #0d62d9;
+        }
+
+        .send-btn:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .mode-btn {
+            background-color: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            color: var(--dark-text-secondary);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .logo-text, .section-title, .history-text, .user-details {
+                display: none;
+            }
+            
+            .history-item {
+                justify-content: center;
+                padding: 12px;
+            }
+            
+            .user-info {
+                justify-content: center;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Loading Animation */
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 10px 0;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--dark-text-secondary);
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background-color: var(--dark-surface);
+            border-left: 4px solid var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger-color);
+        }
+
+        .notification.success {
+            border-left-color: var(--success-color);
+        }
+
+        .connection-status {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+
+        .connection-status.connected {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .connection-status.disconnected {
+            background-color: var(--danger-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar with History -->
+        <div class="sidebar">
+            <div class="logo-container">
+                <div class="logo">M</div>
+                <div class="logo-text">Mallu AI</div>
+            </div>
+            
+            <div class="history-section">
+                <div class="section-title">Recent Conversations</div>
+                <ul class="history-list" id="historyList">
+                    <!-- History items will be populated by JavaScript -->
+                </ul>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">JD</div>
+                    <div class="user-details">
+                        <div class="user-name">John Doe</div>
+                        <div class="user-status">Professional Plan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Chat Area -->
+        <div class="main-content">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <div class="logo">M</div>
+                    <div class="chat-title-text">Mallu AI Assistant</div>
+                </div>
+                <div class="chat-actions">
+                    <button class="action-btn" title="Settings" id="settingsBtn">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="action-btn" title="Clear Chat" id="clearChatBtn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            Hello! I'm Mallu AI, your intelligent assistant. I can help you with text generation, image analysis, document processing, and more. How can I assist you today?
+                        </div>
+                        <div class="message-meta">
+                            <span>Mallu AI</span>
+                            <span>Just now</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-area">
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="chat">Chat</button>
+                    <button class="mode-btn" data-mode="vision">Vision</button>
+                    <button class="mode-btn" data-mode="document">Document</button>
+                    <button class="mode-btn" data-mode="rag">RAG</button>
+                </div>
+                
+                <div class="input-container">
+                    <textarea class="text-input" placeholder="Type your message here..." id="messageInput"></textarea>
+                    <button class="send-btn" id="sendButton">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <div class="input-actions">
+                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.txt,.jpg,.jpeg,.png,.webp">
+                    <button class="file-upload-btn" id="fileUploadBtn" title="Attach file">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="file-upload-btn" title="Take photo" id="cameraBtn">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connection Status -->
+    <div class="connection-status" id="connectionStatus">Connecting...</div>
+
+    <!-- Notification Element -->
+    <div class="notification" id="notification">
+        <i class="fas fa-info-circle"></i>
+        <span id="notificationText">This is a notification</span>
+    </div>
+
+    <script>
+        // FIXED: Use HTTP instead of HTTPS
+        const API_BASE_URL = 'http://localhost:8000';
+        
+        // DOM Elements
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatMessages = document.getElementById('chatMessages');
+        const fileInput = document.getElementById('fileInput');
+        const fileUploadBtn = document.getElementById('fileUploadBtn');
+        const historyList = document.getElementById('historyList');
+        const modeButtons = document.querySelectorAll('.mode-btn');
+        const clearChatBtn = document.getElementById('clearChatBtn');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+        const connectionStatus = document.getElementById('connectionStatus');
+
+        // State
+        let currentMode = 'chat';
+        let conversationHistory = [];
+        let currentConversationId = generateConversationId();
+        let isConnected = false;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConversationHistory();
+            setupEventListeners();
+            testBackendConnection();
+        });
+
+        function setupEventListeners() {
+            // Auto-resize textarea
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Send message on button click
+            sendButton.addEventListener('click', sendMessage);
+            
+            // Send message on Enter key (but allow Shift+Enter for new line)
+            messageInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // File upload button
+            fileUploadBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Handle file selection
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    handleFileUpload(this.files[0]);
+                }
+            });
+            
+            // Mode selector
+            modeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    modeButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentMode = this.dataset.mode;
+                    updateInputPlaceholder();
+                });
+            });
+            
+            // Clear chat button
+            clearChatBtn.addEventListener('click', clearChat);
+        }
+
+        // Test backend connection on startup
+        async function testBackendConnection() {
+            try {
+                console.log('Testing connection to:', `${API_BASE_URL}/health`);
+                const response = await fetch(`${API_BASE_URL}/health`);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Backend connection successful:', data);
+                    isConnected = true;
+                    connectionStatus.textContent = 'Connected';
+                    connectionStatus.className = 'connection-status connected';
+                    showNotification('Connected to Mallu AI server', 'success');
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Backend connection failed:', error);
+                isConnected = false;
+                connectionStatus.textContent = 'Disconnected';
+                connectionStatus.className = 'connection-status disconnected';
+                showNotification('Cannot connect to server. Please make sure the backend is running on localhost:8000', 'error');
+            }
+        }
+
+        function updateInputPlaceholder() {
+            const placeholders = {
+                chat: "Type your message here...",
+                vision: "Describe this image or ask a question...",
+                document: "Ask about the document content...",
+                rag: "Ask a question based on your documents..."
+            };
+            messageInput.placeholder = placeholders[currentMode] || "Type your message here...";
+        }
+
+        function sendMessage() {
+            if (!isConnected) {
+                showNotification('Not connected to server. Please check backend connection.', 'error');
+                testBackendConnection();
+                return;
+            }
+
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage(message, 'user');
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Send to backend based on current mode
+                sendToBackend(message, currentMode);
+            }
+        }
+
+        function handleFileUpload(file) {
+            if (!isConnected) {
+                showNotification('Not connected to server. Please check backend connection.', 'error');
+                testBackendConnection();
+                return;
+            }
+
+            const fileName = file.name;
+            const fileType = file.type;
+            
+            addMessage(`Uploaded file: ${fileName}`, 'user');
+            showTypingIndicator();
+            
+            // Determine the endpoint based on file type and current mode
+            let endpoint, formData, prompt;
+            
+            if ((currentMode === 'vision' || currentMode === 'chat') && fileType.startsWith('image/')) {
+                endpoint = '/vision';
+                formData = new FormData();
+                formData.append('image', file);
+                prompt = "Describe this image in detail";
+                formData.append('prompt', prompt);
+            } else if ((currentMode === 'document' || currentMode === 'chat') && 
+                      (fileType === 'application/pdf' || fileType === 'text/plain')) {
+                endpoint = '/pdf';
+                formData = new FormData();
+                formData.append('file', file);
+                prompt = "Summarize this document";
+                formData.append('prompt', prompt);
+            } else {
+                showNotification("This file type is not supported for the current mode", "error");
+                removeTypingIndicator();
+                addMessage(`I received your file "${fileName}" but it's not compatible with ${currentMode} mode. Try switching modes or use a different file type.`, 'ai');
+                return;
+            }
+            
+            sendFileToBackend(endpoint, formData);
+        }
+
+        async function sendToBackend(message, mode) {
+            try {
+                let endpoint, requestBody;
+                
+                switch(mode) {
+                    case 'chat':
+                        endpoint = '/chat';
+                        requestBody = {
+                            prompt: message,
+                            temperature: 0.7,
+                            max_tokens: 1000
+                        };
+                        break;
+                    case 'rag':
+                        endpoint = '/rag';
+                        requestBody = {
+                            query: message,
+                            documents: []
+                        };
+                        break;
+                    case 'vision':
+                        removeTypingIndicator();
+                        addMessage("Please upload an image for vision analysis using the paperclip button", 'ai');
+                        return;
+                    case 'document':
+                        removeTypingIndicator();
+                        addMessage("Please upload a document (PDF or text file) using the paperclip button", 'ai');
+                        return;
+                    default:
+                        endpoint = '/chat';
+                        requestBody = {
+                            prompt: message,
+                            temperature: 0.7,
+                            max_tokens: 1000
+                        };
+                }
+                
+                console.log('Sending request to:', `${API_BASE_URL}${endpoint}`);
+                
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                removeTypingIndicator();
+                
+                let replyText;
+                if (mode === 'rag') {
+                    replyText = data.answer || data.reply || "I processed your RAG query.";
+                } else {
+                    replyText = data.reply || "I received your message.";
+                }
+                
+                addMessage(replyText, 'ai');
+                saveToHistory(message, replyText);
+                
+            } catch (error) {
+                console.error('Error sending message to backend:', error);
+                removeTypingIndicator();
+                addMessage("Sorry, I encountered an error processing your request. Please try again.", 'ai');
+                showNotification(`Request failed: ${error.message}`, "error");
+            }
+        }
+
+        async function sendFileToBackend(endpoint, formData) {
+            try {
+                console.log('Sending file to:', `${API_BASE_URL}${endpoint}`);
+                
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                removeTypingIndicator();
+                
+                const replyText = data.reply || "I processed your file.";
+                addMessage(replyText, 'ai');
+                saveToHistory(`Uploaded file and requested analysis`, replyText);
+                
+            } catch (error) {
+                console.error('Error sending file to backend:', error);
+                removeTypingIndicator();
+                addMessage("Sorry, I encountered an error processing your file. Please try again.", 'ai');
+                showNotification(`File upload failed: ${error.message}`, "error");
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            
+            if (sender === 'user') {
+                avatarDiv.innerHTML = '<i class="fas fa-user"></i>';
+            } else {
+                avatarDiv.innerHTML = '<i class="fas fa-robot"></i>';
+            }
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            textDiv.textContent = text;
+            
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'message-meta';
+            
+            const senderSpan = document.createElement('span');
+            senderSpan.textContent = sender === 'user' ? 'You' : 'Mallu AI';
+            
+            const timeSpan = document.createElement('span');
+            timeSpan.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            metaDiv.appendChild(senderSpan);
+            metaDiv.appendChild(timeSpan);
+            
+            contentDiv.appendChild(textDiv);
+            contentDiv.appendChild(metaDiv);
+            
+            messageDiv.appendChild(avatarDiv);
+            messageDiv.appendChild(contentDiv);
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai';
+            typingDiv.id = 'typingIndicator';
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            avatarDiv.innerHTML = '<i class="fas fa-robot"></i>';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'typing-indicator';
+            typingIndicator.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            
+            contentDiv.appendChild(typingIndicator);
+            typingDiv.appendChild(avatarDiv);
+            typingDiv.appendChild(contentDiv);
+            
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function saveToHistory(userMessage, aiResponse) {
+            const historyItem = {
+                id: Date.now(),
+                userMessage: userMessage,
+                aiResponse: aiResponse,
+                timestamp: new Date().toISOString(),
+                mode: currentMode
+            };
+            
+            conversationHistory.push(historyItem);
+            updateHistoryUI();
+            saveHistoryToStorage();
+        }
+
+        function updateHistoryUI() {
+            historyList.innerHTML = '';
+            
+            const recentHistory = conversationHistory.slice(-10).reverse();
+            
+            recentHistory.forEach(item => {
+                const historyItem = document.createElement('li');
+                historyItem.className = 'history-item';
+                historyItem.dataset.id = item.id;
+                
+                const iconClass = getModeIcon(item.mode);
+                const truncatedMessage = item.userMessage.length > 30 
+                    ? item.userMessage.substring(0, 30) + '...' 
+                    : item.userMessage;
+                
+                historyItem.innerHTML = `
+                    <i class="fas ${iconClass} history-icon"></i>
+                    <span class="history-text">${truncatedMessage}</span>
+                `;
+                
+                historyItem.addEventListener('click', () => loadConversation(item.id));
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        function getModeIcon(mode) {
+            const icons = {
+                chat: 'fa-comment',
+                vision: 'fa-image',
+                document: 'fa-file-alt',
+                rag: 'fa-search'
+            };
+            return icons[mode] || 'fa-comment';
+        }
+
+        function loadConversation(id) {
+            const conversation = conversationHistory.find(item => item.id === id);
+            if (conversation) {
+                chatMessages.innerHTML = '';
+                addMessage(conversation.userMessage, 'user');
+                addMessage(conversation.aiResponse, 'ai');
+                
+                document.querySelectorAll('.history-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.id == id) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        }
+
+        function clearChat() {
+            chatMessages.innerHTML = '';
+            currentConversationId = generateConversationId();
+            addMessage("Hello! I'm Mallu AI, your intelligent assistant. How can I help you today?", 'ai');
+        }
+
+        function generateConversationId() {
+            return 'conv_' + Date.now();
+        }
+
+        function saveHistoryToStorage() {
+            localStorage.setItem('malluAIHistory', JSON.stringify(conversationHistory));
+        }
+
+        function loadConversationHistory() {
+            const savedHistory = localStorage.getItem('malluAIHistory');
+            if (savedHistory) {
+                conversationHistory = JSON.parse(savedHistory);
+                updateHistoryUI();
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            notificationText.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
